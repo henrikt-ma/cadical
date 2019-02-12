@@ -21,9 +21,21 @@ bool has_suffix (const char * str, const char * suffix);
 
 /*------------------------------------------------------------------------*/
 
+#ifdef _MSC_VER
+/* Omit definition of unused function next_power_of_two, since it is implemented
+ * using __builtin_clz that doesn't exist in MSVC.
+ *
+ * If next_power_of_two is needed one day, it can be implemented using MSVS
+ * compiler intrinsics, as described here:
+ *   https://stackoverflow.com/questions/355967/how-to-use-msvc-intrinsics-to-get-the-equivalent-of-this-gcc-code
+ */
+#else
 inline unsigned next_power_of_two (unsigned n) {
   return 1u << (32 - __builtin_clz (n - 1));
 }
+#endif /* _MSC_VER */
+
+
 
 inline bool is_power_of_two (unsigned n) {
   return n && !(n & (n-1));
