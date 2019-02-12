@@ -12,6 +12,7 @@ option(REALLOC "Use C++ style allocators for all tables" ON)
 option(UNLOCKED "Force compilation without unlocked IO" ON)
 option(ALL "Shortcut for CHECK, LOGGING, and STATS" OFF)
 option(QUIET "Exclude message and profiling code (logging and stats too)" OFF)
+option(SIGNALS "Enable handling of signals" ON)
 
 if(ALL)
   set(CHECK ON)
@@ -60,6 +61,11 @@ if(NOT UNLOCKED)
   add_definitions(-DNUNLOCKED)
 endif()
 
+if(NOT SIGNALS)
+  # Note that SIGNALS is used as a macro name in signal.cpp, so defining it here would cause a conflict.
+  add_definitions(-DNSIGNALS)
+endif()
+
 if(PROFILE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
 endif(PROFILE)
@@ -106,7 +112,6 @@ set(LIB_SRC
   report.cpp
   resources.cpp
   restart.cpp
-  signal.cpp
   solution.cpp
   stats.cpp
   subsume.cpp
@@ -158,6 +163,11 @@ set(INSTALL_HEADERS
   var.hpp
   watch.hpp
 )
+
+if(SIGNALS)
+  list(APPEND LIB_SRC signal.cpp)
+  list(APPEND INSTALL_HEADERS signal.hpp)
+endif(SIGNALS)
 
 # CMake style preparation of config.hpp.
 string(TIMESTAMP CMAKEDATE "%Y-%m-%d %H:%M") # Will be abused to define CADICAL_COMPILED.

@@ -5,7 +5,10 @@
 #include "app.hpp"
 #include "cadical.hpp"
 #include "file.hpp"
+
+#ifndef NSIGNALS
 #include "signal.hpp"
+#endif
 
 /*------------------------------------------------------------------------*/
 
@@ -134,9 +137,14 @@ int App::main (int argc, char ** argv) {
   const char * proof_path = 0, * solution_path = 0, * dimacs_path = 0;
   bool proof_specified = false, dimacs_specified = false;
   const char * dimacs_name, * err;
-  int i, res = 0, time_limit = -1;
+  int i, res = 0;
+#ifndef NSIGNALS
+  int time_limit = -1;
+#endif
   solver = new Solver ();
+#ifndef NSIGNALS
   Signal::init (solver);
+#endif
   for (i = 1; i < argc; i++) {
     if (!strcmp (argv[i], "-h")) { usage (); goto DONE; }
     else if (!strcmp (argv[i], "--version")) {
@@ -150,10 +158,14 @@ int App::main (int argc, char ** argv) {
       else if (solution_path) ERROR ("multiple solution files");
       else solution_path = argv[i];
     } else if (!strcmp (argv[i], "-t")) {
+#ifndef NSIGNALS
       if (++i == argc) ERROR ("argument to '-t' missing");
       else if (time_limit >= 0) ERROR ("multiple time limits");
       else if ((time_limit = atoi (argv[i])) < 0)
-	ERROR ("invalid time limit");
+        ERROR ("invalid time limit");
+#else
+    ERROR ("Build not configured to support signals; illegal to specify time limit.");
+#endif
     } else if (!strcmp (argv[i], "-n")) set ("--no-witness");
 #ifndef QUIET
     else if (!strcmp (argv[i], "-q")) set ("--quiet");
@@ -179,11 +191,13 @@ int App::main (int argc, char ** argv) {
   if (solution_path && !solver->get ("check")) set ("--check");
   solver->section ("banner");
   solver->banner ();
+#ifndef NSIGNALS
   if (time_limit >= 0) {
     solver->section ("alarm");
     solver->message ("setting time limit of %d seconds", time_limit);
     Signal::alarm (time_limit);
   }
+#endif
   solver->section ("parsing input");
   dimacs_name = dimacs_path ? dimacs_path : "<stdin>";
   solver->message ("reading DIMACS file from '%s'", dimacs_name);
@@ -232,7 +246,9 @@ int App::main (int argc, char ** argv) {
   solver->statistics ();
   solver->message ("exit %d", res);
 DONE:
+#ifndef NSIGNALS
   Signal::reset ();
+#endif
   if (!solver->get ("leak")) delete solver;
   return res;
 }

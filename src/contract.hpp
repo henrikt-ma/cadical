@@ -5,6 +5,13 @@
 #define __PRETTY_FUNCTION__ __FUNCSIG__
 #endif /* _MSC_VER */
 
+#ifndef NSIGNALS
+  #define RAISE_CONTRACT_VIOLATION do { raise (CaDiCaL::Solver::contract_violation_signal); } while (0)
+#else
+  #define RAISE_CONTRACT_VIOLATION do {} while (0)
+#endif
+
+
 #define CONTRACT_VIOLATED(...) \
 do { \
   fflush (stdout); \
@@ -13,7 +20,7 @@ do { \
     __PRETTY_FUNCTION__, __FILE__); \
   fprintf (stderr, __VA_ARGS__); \
   fputc ('\n', stderr); \
-  raise (CaDiCaL::Solver::contract_violation_signal); \
+  RAISE_CONTRACT_VIOLATION; \
   abort (); \
 } while (0)
 

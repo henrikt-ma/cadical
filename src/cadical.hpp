@@ -55,7 +55,9 @@ public:
   // If an API usage contract is violated, then this signal is raised
   // (default is 'SIGUSR1').
   //
+#ifndef NSIGNALS
   static int contract_violation_signal;
+#endif
 
   static const char * version ();  // return version string
 
