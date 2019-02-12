@@ -24,11 +24,11 @@
 #ifdef LOGGING
 #define LOGOPT OPTION
 #else
-#define LOGOPT(ARGS...) /**/
+#define LOGOPT(...) /**/
 #endif
 
 #ifdef QUIET
-#define QUTOPT(ARGS...) /**/
+#define QUTOPT(...) /**/
 #else
 #define QUTOPT OPTION
 #endif

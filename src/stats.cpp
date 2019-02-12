@@ -8,16 +8,16 @@ Stats::Stats () { memset (this, 0, sizeof *this); }
 
 /*------------------------------------------------------------------------*/
 
-#define PRT(FMT,ARGS...) \
+#define PRT(FMT, ...) \
 do { \
   if (FMT[0] == ' ' && !verbose) break; \
-  MSG (FMT, ##ARGS); \
+  MSG (FMT, __VA_ARGS__); \
 } while (0)
 
 #ifdef STATS
-#define SSG PRT
+#define SSG PRTVA
 #else
-#define SSG(ARGS...) do { } while (0)
+#define SSG(...) do { } while (0)
 #endif
 
 /*------------------------------------------------------------------------*/
@@ -128,7 +128,7 @@ void Stats::print (Internal * internal) {
   PRT ("  vivifydecs:    %15ld   %10.2f    per checks", stats.vivifydecs, relative (stats.vivifydecs, stats.vivifychecks));
   PRT ("  vivifyreused:  %15ld   %10.2f %%  per decision", stats.vivifyreused, percent (stats.vivifyreused, stats.vivifydecs));
 
-  PRT ("");
+  MSG ("");
 
 #endif // ifndef QUIET
 

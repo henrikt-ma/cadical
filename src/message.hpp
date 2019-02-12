@@ -57,26 +57,26 @@ struct Message {
 
 #ifndef QUIET
 
-#define MSG(ARGS...) Message::message (internal, ##ARGS)
-#define VRB(ARGS...) Message::verbose (internal, ##ARGS)
-#define SECTION(ARGS...) Message::section (internal, ##ARGS)
+#define MSG(...) Message::message (internal, __VA_ARGS__)
+#define VRB(...) Message::verbose (internal, __VA_ARGS__)
+#define SECTION(...) Message::section (internal, __VA_ARGS__)
 
 #else
 
-#define MSG(ARGS...) do { } while (0)
-#define VRB(ARGS...) do { } while (0)
-#define SECTION(ARGS...) do { } while (0)
+#define MSG(...) do { } while (0)
+#define VRB(...) do { } while (0)
+#define SECTION(...) do { } while (0)
 
 #endif
 
 // Parse error.
 
-#define PER(FMT,ARGS...) \
+#define PER(...) \
 do { \
   internal->error.init (\
     "%s:%d: parse error: ", \
     file->name (), (int) file->lineno ()); \
-  return internal->error.append (FMT, ##ARGS); \
+  return internal->error.append (__VA_ARGS__); \
 } while (0)
 
 /*------------------------------------------------------------------------*/

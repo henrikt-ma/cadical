@@ -1,11 +1,11 @@
 #ifndef _error_hpp_INCLUDED
 #define _error_hpp_INCLUDED
 
-#define ERROR_START(FMT,ARGS...) \
+#define ERROR_START(...) \
 do { \
   fflush (stdout); \
   fputs ("*** 'CaDiCaL' error: ", stderr); \
-  fprintf (stderr, FMT, ##ARGS); \
+  fprintf (stderr, __VA_ARGS__); \
 } while (0)
 
 #define ERROR_END() \
@@ -15,9 +15,9 @@ do { \
   abort (); \
 } while (0)
 
-#define ERROR(FMT,ARGS...) \
+#define ERROR(...) \
 do { \
-  ERROR_START (FMT,##ARGS); \
+  ERROR_START (__VA_ARGS__); \
   ERROR_END (fmt); \
 } while (0)
 

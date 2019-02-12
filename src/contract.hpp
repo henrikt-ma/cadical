@@ -1,22 +1,22 @@
 #ifndef _contract_hpp_INCLUDED
 #define _contract_hpp_INCLUDED
 
-#define CONTRACT_VIOLATED(FMT,ARGS...) \
+#define CONTRACT_VIOLATED(...) \
 do { \
   fflush (stdout); \
   fprintf (stderr, \
     "*** 'CaDiCaL' invalid API usage of '%s' in '%s': ", \
     __PRETTY_FUNCTION__, __FILE__); \
-  fprintf (stderr, FMT, ##ARGS); \
+  fprintf (stderr, __VA_ARGS__); \
   fputc ('\n', stderr); \
   raise (CaDiCaL::Solver::contract_violation_signal); \
   abort (); \
 } while (0)
 
-#define REQUIRE(COND,FMT,ARGS...) \
+#define REQUIRE(COND, ...) \
 do { \
   if ((COND)) break; \
-  CONTRACT_VIOLATED (FMT, ##ARGS); \
+  CONTRACT_VIOLATED (__VA_ARGS__); \
 } while (0)
 
 #define REQUIRE_INITIALIZED() \

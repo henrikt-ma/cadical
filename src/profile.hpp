@@ -105,45 +105,57 @@ struct Profiles {
 
 // Macros for Profiling support.
 
-#define START(P,ARGS...) \
+#define START(P) \
 do { \
   if (internal->profiles.P.level > internal->opts.profile) break; \
-  internal->start_profiling (&internal->profiles.P, ##ARGS); \
+  internal->start_profiling (&internal->profiles.P); \
 } while (0)
 
-#define STOP(P,ARGS...) \
+#define STARTVA(P, ...) \
 do { \
   if (internal->profiles.P.level > internal->opts.profile) break; \
-  internal->stop_profiling (&internal->profiles.P, ##ARGS); \
+  internal->start_profiling (&internal->profiles.P, __VA_ARGS__); \
+} while (0)
+
+#define STOP(P) \
+do { \
+  if (internal->profiles.P.level > internal->opts.profile) break; \
+  internal->stop_profiling (&internal->profiles.P); \
+} while (0)
+
+#define STOPVA(P, ...) \
+do { \
+  if (internal->profiles.P.level > internal->opts.profile) break; \
+  internal->stop_profiling (&internal->profiles.P, __VA_ARGS__); \
 } while (0)
 
 #define SWITCH_AND_START(F,T,P) \
 do { \
   const double N = process_time (); \
   const int L = internal->opts.profile; \
-  if (internal->profiles.F.level <= L)  STOP (F, N); \
-  if (internal->profiles.T.level <= L) START (T, N); \
-  if (internal->profiles.P.level <= L) START (P, N); \
+  if (internal->profiles.F.level <= L)  STOPVA (F, N); \
+  if (internal->profiles.T.level <= L) STARTVA (T, N); \
+  if (internal->profiles.P.level <= L) STARTVA (P, N); \
 } while (0)
 
 #define STOP_AND_SWITCH(P,F,T) \
 do { \
   const double N = process_time (); \
   const int L = internal->opts.profile; \
-  if (internal->profiles.P.level <= L)  STOP (P, N); \
-  if (internal->profiles.F.level <= L)  STOP (F, N); \
-  if (internal->profiles.T.level <= L) START (T, N); \
+  if (internal->profiles.P.level <= L)  STOPVA (P, N); \
+  if (internal->profiles.F.level <= L)  STOPVA (F, N); \
+  if (internal->profiles.T.level <= L) STARTVA (T, N); \
 } while (0)
 
 /*------------------------------------------------------------------------*/
 #else // ifndef QUIET
 /*------------------------------------------------------------------------*/
 
-#define START(ARGS...) do { } while (0)
-#define STOP(ARGS...) do { } while (0)
+#define START(P) do { } while (0)
+#define STOP(P) do { } while (0)
 
-#define SWITCH_AND_START(ARGS...) do { } while (0)
-#define STOP_AND_SWITCH(ARGS...) do { } while (0)
+#define SWITCH_AND_START(F, T, P) do { } while (0)
+#define STOP_AND_SWITCH(F, T, P) do { } while (0)
 
 /*------------------------------------------------------------------------*/
 #endif // ifndef QUIET

@@ -120,8 +120,8 @@ bool App::set (const char * arg) { return solver->set (arg); }
 
 // Short-cut for errors to avoid a hard 'exit'.
 
-#define ERROR(FMT,ARGS...) \
-do { solver->error (FMT,##ARGS); res = 1; goto DONE; } while (0)
+#define ERROR(...) \
+do { solver->error (__VA_ARGS__); res = 1; goto DONE; } while (0)
 
 /*------------------------------------------------------------------------*/
 
