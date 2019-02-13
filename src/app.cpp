@@ -24,7 +24,12 @@
 // Internal more specific 'C' header.
 
 extern "C" {
-#include "unistd.h"     // for 'isatty'
+#ifdef _MSC_VER
+  #include <io.h>
+  #define isatty _isatty
+#else
+  #include "unistd.h"     // for 'isatty'
+#endif /* _MSC_VER */
 };
 
 /*------------------------------------------------------------------------*/
