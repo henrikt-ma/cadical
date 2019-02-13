@@ -24,8 +24,12 @@ if(QUIET)
   set(LOGGING OFF)
   set(STATS OFF)
 elseif(CMAKE_HOST_WIN32)
-  message(FATAL_ERROR "The QUIET option is required to be set on Windows platforms.")
+  message(FATAL_ERROR "On Windows platforms, the QUIET option is required to be turned on.")
 endif(QUIET)
+
+if(SIGNALS AND CMAKE_HOST_WIN32)
+  message(FATAL_ERROR "On Windows platforms, the SIGNALS option is required to be turned off.")
+endif()
 
 if(UNLOCKED)
   # Simplified check for unlocked I/O.

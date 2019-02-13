@@ -6,10 +6,16 @@
 
 extern "C" {
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <unistd.h>
-#include <stdlib.h>
+#ifdef _MSC_VER
+  #define popen _popen
+  #define pclose _pclose
+#else
+  #include <unistd.h>
+#endif /* _MSC_VER */
 };
 
 /*------------------------------------------------------------------------*/
