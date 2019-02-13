@@ -1,6 +1,10 @@
 #ifndef _contract_hpp_INCLUDED
 #define _contract_hpp_INCLUDED
 
+#ifdef _MSC_VER
+#define __PRETTY_FUNCTION__ __FUNCSIG__
+#endif /* _MSC_VER */
+
 #define CONTRACT_VIOLATED(...) \
 do { \
   fflush (stdout); \
