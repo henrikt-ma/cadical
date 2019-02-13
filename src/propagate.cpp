@@ -1,5 +1,9 @@
 #include "internal.hpp"
 
+#ifdef _MSC_VER
+  #define __builtin_prefetch(expr) do {} while(false)
+#endif /* _MSC_VER */
+
 namespace CaDiCaL {
 
 inline void Internal::search_assign (int lit, Clause * reason) {
