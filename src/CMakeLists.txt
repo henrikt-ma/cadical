@@ -132,40 +132,7 @@ set(CLI_SRC
 )
 
 set(INSTALL_HEADERS
-# app.hpp
-  arena.hpp
-  bins.hpp
   cadical.hpp
-  clause.hpp
-  contract.hpp
-  cover.hpp
-  elim.hpp
-  ema.hpp
-  error.hpp
-  external.hpp
-  file.hpp
-  flags.hpp
-  format.hpp
-  heap.hpp
-  internal.hpp
-  iterator.hpp
-  level.hpp
-  limit.hpp
-  logging.hpp
-  mem.hpp
-  message.hpp
-  occs.hpp
-  options.hpp
-  parse.hpp
-  profile.hpp
-  proof.hpp
-  queue.hpp
-  resources.hpp
-  signal.hpp
-  stats.hpp
-  util.hpp
-  var.hpp
-  watch.hpp
 )
 
 if(SIGNALS)
